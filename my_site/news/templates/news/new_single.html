@@ -1,0 +1,59 @@
+{% extends 'news/base.html' %}
+{% block desc %}{{ new.description }}{% endblock desc %}
+{% block keywords %}{{ new.keywords }}{% endblock keywords %}
+{% block title %}{{ new.title }}{% endblock title %}
+
+{% block content %}
+    <div>
+        <a class="button" href="/accounts/logout/">
+            Выйти из пользователя
+        </a><br>
+        
+        <a class="button" href="/">
+            Вернуться на главную
+        </a>
+    </div>
+    
+    <div>
+        <a class="button" href="/export">
+            Выгрузка
+        </a>
+    </div>
+    <div>
+        <a download="/news.xml" href="#">
+            Скачать
+        </a>
+    </div>
+
+
+    
+
+    <h1>{{ new.title }}</h1>
+    <p>{{ new.text }}</p><hr>
+
+    Категория - {{ new.category }}<br>
+    Теги - {% for tag in new.tags.all %}
+                {{ tag.title }}
+            {% endfor %}<br>
+    Автор: {{ new.user }}-{{ new.created }}
+    <h4>Комментарии</h4>
+
+    {% for comment in comments %}
+        Пользователь - {{ comment.user }}<br>
+        {{ comment.text }} <br>
+        Добавлен - {{ comment.created }}<br><br>
+    {% endfor %}
+    {% if user.is_active %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Отправить</button>
+        </form>
+    {% else %}
+        <div>
+            <a class="button" href="/accounts/login/">
+                Чтобы оставить комментарий авторизуйтесь
+            </a>
+        </div>
+    {% endif %}
+{% endblock content %}
